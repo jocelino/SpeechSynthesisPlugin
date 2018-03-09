@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.speech.tts.TextToSpeech.UtteranceProgressListener;
 import android.speech.tts.Voice;
 import android.util.Log;
 
@@ -24,7 +24,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
-public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener {
+public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, UtteranceProgressListener {
 
     private static final String LOG_TAG = "TTS";
     private static final int STOPPED = 0;
@@ -133,15 +133,15 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     state = SpeechSynthesis.INITIALIZING;
                     mTts = new TextToSpeech(cordova.getActivity().getApplicationContext(), this);
                 }else{
-            		getVoices(callbackContext);
+                    getVoices(callbackContext);
                 }
                 PluginResult pluginResult = new PluginResult(status, SpeechSynthesis.INITIALIZING);
                 pluginResult.setKeepCallback(true);
                 startupCallbackContext.sendPluginResult(pluginResult);
             }
 
-			
-			
+            
+            
             else if (action.equals("shutdown")) {
                 if (mTts != null) {
                     mTts.shutdown();
@@ -213,7 +213,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         PluginResult result = new PluginResult(PluginResult.Status.OK, voices);
         result.setKeepCallback(false);
         startupCallbackContext.sendPluginResult(result);
-        mTts.setOnUtteranceCompletedListener(this);
+        mTts.setUtteranceProgressListener(this);
     }
 
     private void fireEndEvent(CallbackContext callbackContext) {
