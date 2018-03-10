@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
-import android.speech.tts.TextToSpeech.UtteranceProgressListener;
+import android.speech.tts.UtteranceProgressListener;
 import android.speech.tts.Voice;
 import android.util.Log;
 
