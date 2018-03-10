@@ -260,7 +260,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             
 //                Putting this code in hear as a place holder. When everything moves to API level 15 or greater
 //                we'll switch over to this way of tracking progress.
-//                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
 
                    @Override
                    public void onDone(String utteranceId) {
