@@ -17,6 +17,7 @@ import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.UtteranceProgressListener;
+android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.speech.tts.Voice;
 import android.util.Log;
 
@@ -24,7 +25,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
-public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, UtteranceProgressListener {
+public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, UtteranceProgressListener{
 
     private static final String LOG_TAG = "TTS";
     private static final int STOPPED = 0;
@@ -213,7 +214,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, Ut
         PluginResult result = new PluginResult(PluginResult.Status.OK, voices);
         result.setKeepCallback(false);
         startupCallbackContext.sendPluginResult(result);
-        mTts.setUtteranceProgressListener(this);
+        mTts.setOnUtteranceCompletedListener(this);
     }
 
     private void fireEndEvent(CallbackContext callbackContext) {
