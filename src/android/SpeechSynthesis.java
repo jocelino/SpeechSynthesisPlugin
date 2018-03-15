@@ -282,6 +282,8 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                    @Override
                    public void onStart(String utteranceId) {
                        Log.d(LOG_TAG, "started talking");
+                       result.setKeepCallback(false);
+                       callbackContext.sendPluginResult(result);  
                    }
                    
                });
