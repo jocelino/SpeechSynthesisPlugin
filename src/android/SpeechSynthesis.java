@@ -26,7 +26,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
-public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener, SynthesisCallback{
+public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener{
 
     private static final String LOG_TAG = "TTS";
     private static final int STOPPED = 0;
@@ -107,7 +107,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     fireErrorEvent(callbackContext);
                 }
             } else if (action.equals("pause")) {
-                //mTts.rangeStart();
+                mTts.rangeStart();
             } else if (action.equals("resume")) {
                 Log.d(LOG_TAG, "Not implemented yet");
             } else if (action.equals("stop")) {
