@@ -238,7 +238,6 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         error.put("name","");
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error));
     }
-    @Override
     public void onRangeStart(String utteranceId, int start, int end, int frame){
         JSONObject event = new JSONObject();
         event.put("type","boundry");
