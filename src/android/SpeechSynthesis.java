@@ -239,16 +239,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error));
     }
 
-    public void onRangeStart (String utteranceId, int start, int end, int frame){
-        JSONObject event = new JSONObject();
-        event.put("type","boundry");
-        event.put("charIndex",start);
-        event.put("elapsedTime",end);
-        event.put("name",frame);
-        PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-        pr.setKeepCallback(true);
-        callbackContext.sendPluginResult(pr);
-    }
+    
 
     /**
      * Is the TTS service ready to play yet?
@@ -272,7 +263,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             
 //                Putting this code in hear as a place holder. When everything moves to API level 15 or greater
 //                we'll switch over to this way of tracking progress.
-//                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
 //
 //                    @Override
 //                    public void onDone(String utteranceId) {
@@ -294,8 +285,18 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
 //                    public void onStart(String utteranceId) {
 //                        Log.d(LOG_TAG, "started talking");
 //                    }
-//                    
-//                });
+                    @Override
+                    public void onRangeStart(String utteranceId, int start, int end, int frame){
+                        JSONObject event = new JSONObject();
+                        event.put("type","boundry");
+                        event.put("charIndex",start);
+                        event.put("elapsedTime",end);
+                        event.put("name",frame);
+                        PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+                        pr.setKeepCallback(true);
+                        callbackContext.sendPluginResult(pr);
+                    }
+                });
         }
         else if (status == TextToSpeech.ERROR) {
             state = SpeechSynthesis.STOPPED;
