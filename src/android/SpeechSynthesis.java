@@ -25,7 +25,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
-public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener, UtteranceProgressListener {
+public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener{
 
     private static final String LOG_TAG = "TTS";
     private static final int STOPPED = 0;
@@ -238,7 +238,17 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         error.put("name","");
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error));
     }
-
+    @Override
+    public void onRangeStart(String utteranceId, int start, int end, int frame){
+        JSONObject event = new JSONObject();
+        event.put("type","boundry");
+        event.put("charIndex",start);
+        event.put("elapsedTime",end);
+        event.put("name",frame);
+        PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+        pr.setKeepCallback(true);
+        callbackContext.sendPluginResult(pr);
+    }
     
 
     /**
@@ -263,40 +273,40 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             
 //                Putting this code in hear as a place holder. When everything moves to API level 15 or greater
 //                we'll switch over to this way of tracking progress.
-                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+//                 mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
 //
-                   @Override
-                   public void onDone(String utteranceId) {
-                       Log.d(LOG_TAG, "got completed utterance");
-                       PluginResult result = new PluginResult(PluginResult.Status.OK);
-                       result.setKeepCallback(false);
-                       callbackContext.sendPluginResult(result);        
-                   }
+//                    @Override
+//                    public void onDone(String utteranceId) {
+//                        Log.d(LOG_TAG, "got completed utterance");
+//                        PluginResult result = new PluginResult(PluginResult.Status.OK);
+//                        result.setKeepCallback(false);
+//                        callbackContext.sendPluginResult(result);        
+//                    }
 
-                   @Override
-                   public void onError(String utteranceId) {
-                       Log.d(LOG_TAG, "got utterance error");
-                       PluginResult result = new PluginResult(PluginResult.Status.ERROR);
-                       result.setKeepCallback(false);
-                       callbackContext.sendPluginResult(result);        
-                   }
+//                    @Override
+//                    public void onError(String utteranceId) {
+//                        Log.d(LOG_TAG, "got utterance error");
+//                        PluginResult result = new PluginResult(PluginResult.Status.ERROR);
+//                        result.setKeepCallback(false);
+//                        callbackContext.sendPluginResult(result);        
+//                    }
 
-                   @Override
-                   public void onStart(String utteranceId) {
-                       Log.d(LOG_TAG, "started talking");
-                   }
-                    @Override
-                    public void onRangeStart(String utteranceId, int start, int end, int frame){
-                        JSONObject event = new JSONObject();
-                        event.put("type","boundry");
-                        event.put("charIndex",start);
-                        event.put("elapsedTime",end);
-                        event.put("name",frame);
-                        PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-                        pr.setKeepCallback(true);
-                        callbackContext.sendPluginResult(pr);
-                    }
-                });
+//                    @Override
+//                    public void onStart(String utteranceId) {
+//                        Log.d(LOG_TAG, "started talking");
+//                    }
+//                     @Override
+//                     public void onRangeStart(String utteranceId, int start, int end, int frame){
+//                         JSONObject event = new JSONObject();
+//                         event.put("type","boundry");
+//                         event.put("charIndex",start);
+//                         event.put("elapsedTime",end);
+//                         event.put("name",frame);
+//                         PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+//                         pr.setKeepCallback(true);
+//                         callbackContext.sendPluginResult(pr);
+//                     }
+//                 });
         }
         else if (status == TextToSpeech.ERROR) {
             state = SpeechSynthesis.STOPPED;
