@@ -17,6 +17,7 @@ import android.os.Build;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.speech.tts.UtteranceProgressListener;
 import android.speech.tts.Voice;
 import android.util.Log;
 
@@ -133,15 +134,15 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     state = SpeechSynthesis.INITIALIZING;
                     mTts = new TextToSpeech(cordova.getActivity().getApplicationContext(), this);
                 }else{
-            		getVoices(callbackContext);
+                    getVoices(callbackContext);
                 }
                 PluginResult pluginResult = new PluginResult(status, SpeechSynthesis.INITIALIZING);
                 pluginResult.setKeepCallback(true);
                 startupCallbackContext.sendPluginResult(pluginResult);
             }
 
-			
-			
+            
+            
             else if (action.equals("shutdown")) {
                 if (mTts != null) {
                     mTts.shutdown();
@@ -236,6 +237,17 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         error.put("elapsedTime",0);
         error.put("name","");
         callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.ERROR, error));
+    }
+
+    private void onRangeStart (String utteranceId, int start, int end, int frame){
+        JSONObject event = new JSONObject();
+        error.put("type","boundry");
+        error.put("charIndex",start);
+        error.put("elapsedTime",end);
+        error.put("name",frame);
+        PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+        pr.setKeepCallback(true);
+        callbackContext.sendPluginResult(pr);
     }
 
     /**
