@@ -107,7 +107,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     fireErrorEvent(callbackContext);
                 }
             } else if (action.equals("pause")) {
-                mTts.rangeStart();
+                //mTts.rangeStart();
             } else if (action.equals("resume")) {
                 Log.d(LOG_TAG, "Not implemented yet");
             } else if (action.equals("stop")) {
