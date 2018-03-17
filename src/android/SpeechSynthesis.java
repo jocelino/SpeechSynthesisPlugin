@@ -261,10 +261,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             mTts.setOnUtteranceProgressListener(new UtteranceProgressListener(){
                @Override
                public void onDone(String utteranceId) {
-                   Log.d(LOG_TAG, "got completed utterance");
-                   PluginResult result = new PluginResult(PluginResult.Status.OK);
-                   result.setKeepCallback(false);
-                   callbackContext.sendPluginResult(result);        
+                   fireEndEvent(callbackContext);       
                }
 
                @Override
@@ -277,7 +274,14 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
 
                @Override
                public void onStart(String utteranceId) {
-                   Log.d(LOG_TAG, "started talking");
+                    JSONObject event = new JSONObject();
+                    event.put("type","start");
+                    event.put("charIndex",0);
+                    event.put("elapsedTime",0);
+                    event.put("name","");
+                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+                    pr.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pr);
                }
                 public void onRangeStart(String utteranceId, int start, int end, int frame){
                     JSONObject event = new JSONObject();
