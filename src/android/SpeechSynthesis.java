@@ -275,10 +275,14 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                @Override
                public void onStart(String utteranceId) {
                     JSONObject event = new JSONObject();
-                    event.put("type","start");
-                    event.put("charIndex",0);
-                    event.put("elapsedTime",0);
-                    event.put("name","");
+                    try {
+                        event.put("type","start");
+                        event.put("charIndex",0);
+                        event.put("elapsedTime",0);
+                        event.put("name","");
+                    } catch (JSONException e) {
+                        // this will never happen
+                    }
                     PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
                     pr.setKeepCallback(true);
                     callbackContext.sendPluginResult(pr);
