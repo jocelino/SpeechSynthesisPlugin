@@ -287,7 +287,8 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     pr.setKeepCallback(true);
                     callbackContext.sendPluginResult(pr);
                }
-                public void onRangeStart(String utteranceId, int start, int end, int frame){
+               @Override
+               public void onRangeStart(String utteranceId, int start, int end, int frame){
                     JSONObject event = new JSONObject();
                     try {
                         event.put("type","boundry");
@@ -300,7 +301,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
                     pr.setKeepCallback(true);
                     callbackContext.sendPluginResult(pr);
-                }
+               }
             });
         }
         else if (status == TextToSpeech.ERROR) {
