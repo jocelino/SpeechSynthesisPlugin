@@ -84,14 +84,14 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     HashMap<String, String> map = null;
                     map = new HashMap<String, String>();
                     map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, callbackContext.getCallbackId());
-                    JSONObject event = new JSONObject();
-                    event.put("type","start");
-                    event.put("charIndex",0);
-                    event.put("elapsedTime",0);
-                    event.put("name","");
-                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-                    pr.setKeepCallback(true);
-                    callbackContext.sendPluginResult(pr);
+                    // JSONObject event = new JSONObject();
+                    // event.put("type","start");
+                    // event.put("charIndex",0);
+                    // event.put("elapsedTime",0);
+                    // event.put("name","");
+                    // PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+                    // pr.setKeepCallback(true);
+                    // callbackContext.sendPluginResult(pr);
                     mTts.speak(text, TextToSpeech.QUEUE_ADD, map);
                 } else {
                     fireErrorEvent(callbackContext);
