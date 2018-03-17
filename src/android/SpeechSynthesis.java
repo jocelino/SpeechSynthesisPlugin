@@ -260,7 +260,8 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             getVoices(this.startupCallbackContext);
 
             mTts.setOnUtteranceProgressListener(new UtteranceProgressListener(){
-                public void onRangeStart(String utteranceId, int start, int end, int frame){
+               @Override
+               public void onRangeStart(String utteranceId, int start, int end, int frame){
                 fireEndEvent(callbackContext);
                     JSONObject event = new JSONObject();
                     try {
