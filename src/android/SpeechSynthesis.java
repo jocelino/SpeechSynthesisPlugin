@@ -276,7 +276,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     callbackContext.sendPluginResult(pr);
                }
                @Override
-               void onAudioAvailable (String utteranceId, byte[] audio){
+               public void onAudioAvailable (String utteranceId, byte[] audio){
                 JSONObject event = new JSONObject();
                     try {
                         event.put("type","boundry");
