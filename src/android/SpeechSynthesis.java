@@ -222,7 +222,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         JSONObject event = new JSONObject();
         try {
             event.put("type","end");
-            event.put("param","jp");
+            event.put("charIndex","jp");
         } catch (JSONException e) {
             // this will never happen
         }
@@ -289,6 +289,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     callbackContext.sendPluginResult(pr);
                }
                public void onRangeStart(String utteranceId, int start, int end, int frame){
+                fireEndEvent(callbackContext);
                     JSONObject event = new JSONObject();
                     try {
                         event.put("type","boundry");
