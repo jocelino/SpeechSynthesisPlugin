@@ -260,8 +260,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             getVoices(this.startupCallbackContext);
 
             mTts.setOnUtteranceProgressListener(new UtteranceProgressListener(){
-               @Override
-               public void onRangeStart(String utteranceId, int start, int end, int frame){
+                public void onRangeStart(String utteranceId, int start, int end, int frame){
                 fireEndEvent(callbackContext);
                     JSONObject event = new JSONObject();
                     try {
@@ -269,6 +268,21 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                         event.put("charIndex",start);
                         event.put("elapsedTime",end);
                         event.put("name",frame);
+                    } catch (JSONException e) {
+                        // this will never happen
+                    }
+                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+                    pr.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pr);
+               }
+               @Override
+               void onAudioAvailable (String utteranceId, byte[] audio){
+                JSONObject event = new JSONObject();
+                    try {
+                        event.put("type","boundry");
+                        event.put("charIndex",0);
+                        event.put("elapsedTime",0);
+                        event.put("name","jp");
                     } catch (JSONException e) {
                         // this will never happen
                     }
