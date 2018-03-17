@@ -107,7 +107,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     fireErrorEvent(callbackContext);
                 }
             } else if (action.equals("pause")) {
-                Log.d(LOG_TAG, "Not implemented yet");
+                mTts.rangeStart();
             } else if (action.equals("resume")) {
                 Log.d(LOG_TAG, "Not implemented yet");
             } else if (action.equals("stop")) {
@@ -246,6 +246,20 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             event.put("charIndex",start);
             event.put("elapsedTime",end);
             event.put("name",frame);
+        } catch (JSONException e) {
+            // this will never happen
+        }
+        PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+        pr.setKeepCallback(true);
+        callbackContext.sendPluginResult(pr);
+    }
+    public void rangeStart(int markerInFrames, int start, int end){
+        JSONObject event = new JSONObject();
+        try {
+            event.put("type","boundry");
+            event.put("charIndex",start);
+            event.put("elapsedTime",end);
+            event.put("name",markerInFrames);
         } catch (JSONException e) {
             // this will never happen
         }
