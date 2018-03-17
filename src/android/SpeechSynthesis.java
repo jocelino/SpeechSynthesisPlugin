@@ -107,7 +107,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     fireErrorEvent(callbackContext);
                 }
             } else if (action.equals("pause")) {
-                mTts.rangeStart();
+                //mTts.rangeStart();
             } else if (action.equals("resume")) {
                 Log.d(LOG_TAG, "Not implemented yet");
             } else if (action.equals("stop")) {
@@ -253,21 +253,6 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         pr.setKeepCallback(true);
         callbackContext.sendPluginResult(pr);
     }
-    public void rangeStart(int markerInFrames, int start, int end){
-        JSONObject event = new JSONObject();
-        try {
-            event.put("type","boundry");
-            event.put("charIndex",start);
-            event.put("elapsedTime",end);
-            event.put("name",markerInFrames);
-        } catch (JSONException e) {
-            // this will never happen
-        }
-        PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-        pr.setKeepCallback(true);
-        callbackContext.sendPluginResult(pr);
-    }
-    
 
     /**
      * Is the TTS service ready to play yet?
@@ -287,44 +272,24 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         if (mTts != null && status == TextToSpeech.SUCCESS) {
             state = SpeechSynthesis.STARTED;
             getVoices(this.startupCallbackContext);
-            
-            
-//                Putting this code in hear as a place holder. When everything moves to API level 15 or greater
-//                we'll switch over to this way of tracking progress.
-//                 mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-//
-//                    @Override
-//                    public void onDone(String utteranceId) {
-//                        Log.d(LOG_TAG, "got completed utterance");
-//                        PluginResult result = new PluginResult(PluginResult.Status.OK);
-//                        result.setKeepCallback(false);
-//                        callbackContext.sendPluginResult(result);        
-//                    }
 
-//                    @Override
-//                    public void onError(String utteranceId) {
-//                        Log.d(LOG_TAG, "got utterance error");
-//                        PluginResult result = new PluginResult(PluginResult.Status.ERROR);
-//                        result.setKeepCallback(false);
-//                        callbackContext.sendPluginResult(result);        
-//                    }
-
-//                    @Override
-//                    public void onStart(String utteranceId) {
-//                        Log.d(LOG_TAG, "started talking");
-//                    }
-//                     @Override
-//                     public void onRangeStart(String utteranceId, int start, int end, int frame){
-//                         JSONObject event = new JSONObject();
-//                         event.put("type","boundry");
-//                         event.put("charIndex",start);
-//                         event.put("elapsedTime",end);
-//                         event.put("name",frame);
-//                         PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-//                         pr.setKeepCallback(true);
-//                         callbackContext.sendPluginResult(pr);
-//                     }
-//                 });
+            mTts.setOnUtteranceProgressListener(new UtteranceProgressListener(){
+                @Override
+                public void onRangeStart(String utteranceId, int start, int end, int frame){
+                    JSONObject event = new JSONObject();
+                    try {
+                        event.put("type","boundry");
+                        event.put("charIndex",start);
+                        event.put("elapsedTime",end);
+                        event.put("name",frame);
+                    } catch (JSONException e) {
+                        // this will never happen
+                    }
+                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+                    pr.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pr);
+                }
+            });
         }
         else if (status == TextToSpeech.ERROR) {
             state = SpeechSynthesis.STOPPED;
