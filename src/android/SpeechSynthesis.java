@@ -260,14 +260,43 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             getVoices(this.startupCallbackContext);
 
             mTts.setOnUtteranceProgressListener(new UtteranceProgressListener(){
-                public void onRangeStart(String utteranceId, int start, int end, int frame){
-                fireEndEvent(callbackContext);
+                
+               @Override
+               public void onDone(String utteranceId) {
+                   fireEndEvent(callbackContext);       
+               }
+
+               @Override
+               public void onError(String utteranceId) {
+                   Log.d(LOG_TAG, "got utterance error");
+                   PluginResult result = new PluginResult(PluginResult.Status.ERROR);
+                   result.setKeepCallback(false);
+                   callbackContext.sendPluginResult(result);        
+               }
+
+               @Override
+               public void onStart(String utteranceId) {
                     JSONObject event = new JSONObject();
                     try {
+                        event.put("type","start");
+                        event.put("charIndex",0);
+                        event.put("elapsedTime",0);
+                        event.put("name","");
+                    } catch (JSONException e) {
+                        // this will never happen
+                    }
+                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
+                    pr.setKeepCallback(true);
+                    callbackContext.sendPluginResult(pr);
+               }
+               @Override
+               public void onBeginSynthesis (String utteranceId, int sampleRateInHz, int audioFormat, int channelCount){
+                JSONObject event = new JSONObject();
+                    try {
                         event.put("type","boundry");
-                        event.put("charIndex",start);
-                        event.put("elapsedTime",end);
-                        event.put("name",frame);
+                        event.put("charIndex",0);
+                        event.put("elapsedTime",0);
+                        event.put("name","jp");
                     } catch (JSONException e) {
                         // this will never happen
                     }
@@ -290,27 +319,14 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     pr.setKeepCallback(true);
                     callbackContext.sendPluginResult(pr);
                }
-               @Override
-               public void onDone(String utteranceId) {
-                   fireEndEvent(callbackContext);       
-               }
-
-               @Override
-               public void onError(String utteranceId) {
-                   Log.d(LOG_TAG, "got utterance error");
-                   PluginResult result = new PluginResult(PluginResult.Status.ERROR);
-                   result.setKeepCallback(false);
-                   callbackContext.sendPluginResult(result);        
-               }
-
-               @Override
-               public void onStart(String utteranceId) {
+               public void onRangeStart (String utteranceId, int start, int end, int frame){
+                fireEndEvent(callbackContext);
                     JSONObject event = new JSONObject();
                     try {
-                        event.put("type","start");
-                        event.put("charIndex",0);
-                        event.put("elapsedTime",0);
-                        event.put("name","");
+                        event.put("type","boundry");
+                        event.put("charIndex",start);
+                        event.put("elapsedTime",end);
+                        event.put("name",frame);
                     } catch (JSONException e) {
                         // this will never happen
                     }
