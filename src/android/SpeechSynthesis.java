@@ -293,7 +293,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                public void onBeginSynthesis (String utteranceId, int sampleRateInHz, int audioFormat, int channelCount){
                 JSONObject event = new JSONObject();
                     try {
-                        event.put("type","boundry");
+                        event.put("type","boundary");
                         event.put("charIndex",0);
                         event.put("elapsedTime",0);
                         event.put("name","jp");
@@ -308,7 +308,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                public void onAudioAvailable (String utteranceId, byte[] audio){
                 JSONObject event = new JSONObject();
                     try {
-                        event.put("type","boundry");
+                        event.put("type","boundary");
                         event.put("charIndex",0);
                         event.put("elapsedTime",0);
                         event.put("name","jp");
@@ -323,7 +323,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                 fireEndEvent(callbackContext);
                     JSONObject event = new JSONObject();
                     try {
-                        event.put("type","boundry");
+                        event.put("type","boundary");
                         event.put("charIndex",start);
                         event.put("elapsedTime",end);
                         event.put("name",frame);
