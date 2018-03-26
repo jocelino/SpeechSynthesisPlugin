@@ -93,6 +93,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     // pr.setKeepCallback(true);
                     // callbackContext.sendPluginResult(pr);
                     mTts.speak(text, TextToSpeech.QUEUE_ADD, map);
+                    mTts.setOnUtteranceCompletedListener(this);
                 } else {
                     fireErrorEvent(callbackContext);
                 }
@@ -215,7 +216,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         PluginResult result = new PluginResult(PluginResult.Status.OK, voices);
         result.setKeepCallback(false);
         startupCallbackContext.sendPluginResult(result);
-        mTts.SetOnUtteranceProgressListener(new utteranceProgressListener(this));
+        mTts.setOnUtteranceCompletedListener(this);
     }
 
     private void fireEndEvent(CallbackContext callbackContext) {
