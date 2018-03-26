@@ -26,7 +26,7 @@ SpeechSynthesis.prototype.speak = function(utterance) {
 			utterance.onresume(event);
 		} else if (event.type === "mark" && typeof utterance.onmark === "function") {
 			utterance.onmark(event);
-		} else if (event.type === "boundry" && typeof utterance.onboundry === "function") {
+		} else if (event.type === "boundary" && typeof utterance.onboundary === "function") {
 			utterance.onboundry(event);
 		}
 	};
