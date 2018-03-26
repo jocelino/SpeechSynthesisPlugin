@@ -259,7 +259,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             state = SpeechSynthesis.STARTED;
             getVoices(this.startupCallbackContext);
 
-            mTts.setOnUtteranceProgressListener(new UtteranceProgressListener(){this});
+            mTts.setOnUtteranceProgressListener(new utteranceProgressListener(){this});
         }
         else if (status == TextToSpeech.ERROR) {
             state = SpeechSynthesis.STOPPED;
@@ -269,7 +269,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
         }
     }
 
-    public class UtteranceProgressListener : UtteranceProgressListener{
+    public class utteranceProgressListener : UtteranceProgressListener{
         @Override
                public void onDone(String utteranceId) {
                    fireEndEvent(callbackContext);       
