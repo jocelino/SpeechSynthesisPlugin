@@ -26,7 +26,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
 
-public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener{
+public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, OnUtteranceCompletedListener, SynthesisCallback{
 
     private static final String LOG_TAG = "TTS";
     private static final int STOPPED = 0;
@@ -319,7 +319,6 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     pr.setKeepCallback(true);
                     callbackContext.sendPluginResult(pr);
                }
-               @Override
                public void onRangeStart (String utteranceId, int start, int end, int frame){
                 fireEndEvent(callbackContext);
                     JSONObject event = new JSONObject();
