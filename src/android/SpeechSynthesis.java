@@ -93,6 +93,7 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     // pr.setKeepCallback(true);
                     // callbackContext.sendPluginResult(pr);
                     mTts.speak(text, TextToSpeech.QUEUE_ADD, map);
+                    mTts.setOnUtteranceCompletedListener(this);
                 } else {
                     fireErrorEvent(callbackContext);
                 }
@@ -259,18 +260,9 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
             state = SpeechSynthesis.STARTED;
             getVoices(this.startupCallbackContext);
 
-            mTts.setOnUtteranceProgressListener(new utteranceProgressListener(){this});
-        }
-        else if (status == TextToSpeech.ERROR) {
-            state = SpeechSynthesis.STOPPED;
-            PluginResult result = new PluginResult(PluginResult.Status.ERROR, SpeechSynthesis.STOPPED);
-            result.setKeepCallback(false);
-            this.startupCallbackContext.sendPluginResult(result);
-        }
-    }
-
-    public class utteranceProgressListener : UtteranceProgressListener{
-        @Override
+            mTts.setOnUtteranceProgressListener(new UtteranceProgressListener(){
+                
+               @Override
                public void onDone(String utteranceId) {
                    fireEndEvent(callbackContext);       
                }
@@ -298,51 +290,14 @@ public class SpeechSynthesis extends CordovaPlugin implements OnInitListener, On
                     pr.setKeepCallback(true);
                     callbackContext.sendPluginResult(pr);
                }
-               @Override
-               public void onBeginSynthesis (String utteranceId, int sampleRateInHz, int audioFormat, int channelCount){
-                JSONObject event = new JSONObject();
-                    try {
-                        event.put("type","boundary");
-                        event.put("charIndex",0);
-                        event.put("elapsedTime",0);
-                        event.put("name","jp");
-                    } catch (JSONException e) {
-                        // this will never happen
-                    }
-                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-                    pr.setKeepCallback(true);
-                    callbackContext.sendPluginResult(pr);
-               }
-               @Override
-               public void onAudioAvailable (String utteranceId, byte[] audio){
-                JSONObject event = new JSONObject();
-                    try {
-                        event.put("type","boundary");
-                        event.put("charIndex",0);
-                        event.put("elapsedTime",0);
-                        event.put("name","jp");
-                    } catch (JSONException e) {
-                        // this will never happen
-                    }
-                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-                    pr.setKeepCallback(true);
-                    callbackContext.sendPluginResult(pr);
-               }
-               public void onRangeStart (String utteranceId, int start, int end, int frame){
-                fireEndEvent(callbackContext);
-                    JSONObject event = new JSONObject();
-                    try {
-                        event.put("type","boundary");
-                        event.put("charIndex",start);
-                        event.put("elapsedTime",end);
-                        event.put("name",frame);
-                    } catch (JSONException e) {
-                        // this will never happen
-                    }
-                    PluginResult pr = new PluginResult(PluginResult.Status.OK, event);
-                    pr.setKeepCallback(true);
-                    callbackContext.sendPluginResult(pr);
-               }
+            });
+        }
+        else if (status == TextToSpeech.ERROR) {
+            state = SpeechSynthesis.STOPPED;
+            PluginResult result = new PluginResult(PluginResult.Status.ERROR, SpeechSynthesis.STOPPED);
+            result.setKeepCallback(false);
+            this.startupCallbackContext.sendPluginResult(result);
+        }
     }
 
     /**
